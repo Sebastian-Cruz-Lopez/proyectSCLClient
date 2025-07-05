@@ -62,24 +62,38 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-   
-
     @GetMapping
     public String Index(Model model) {
 
-        RestTemplate restTemplate = new RestTemplate();
-        
-        ResponseEntity<Result<UsuarioDireccion>> response = restTemplate.exchange("http://localhost:8080/usuarioapi", 
-                HttpMethod.GET, 
-                HttpEntity.EMPTY, 
-                new ParameterizedTypeReference<Result<UsuarioDireccion>>(){});
-        
-        Result<UsuarioDireccion> result = response.getBody();
-        model.addAttribute("usuariosDireccion", result.objects);
+        try {
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            ResponseEntity<Result<UsuarioDireccion>> response = restTemplate.exchange("http://localhost:8080/usuarioapi",
+                    HttpMethod.GET,
+                    HttpEntity.EMPTY,
+                    new ParameterizedTypeReference<Result<UsuarioDireccion>>() {
+            });
+
+            Result<UsuarioDireccion> result = response.getBody();
+
+            ResponseEntity<Result<Roll>> responseRolls = restTemplate.exchange("http://localhost:8080/usuarioapi/rolls",
+                    HttpMethod.GET,
+                    HttpEntity.EMPTY,
+                    new ParameterizedTypeReference<Result<Roll>>() {
+            });
+
+            List<Roll> resultRolls = responseRolls.getBody().objects;
+;            model.addAttribute("usuariosDireccion", result.objects);
+            model.addAttribute("rolls", resultRolls);
+
+        } catch (Exception ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
 
         return "UsuarioIndex";
     }
-    
+
     @GetMapping("/direccion/estado/{idPais}")
     @ResponseBody
     public List<Estado> GetEstados(@PathVariable("idPais") int idPais) {
@@ -97,7 +111,7 @@ public class UsuarioController {
         }
         return null;
     }
- 
+
     @GetMapping("/direccion/municipio/{idEstado}")
     @ResponseBody
     public List<Municipio> GetMunicipios(@PathVariable("idEstado") int idEstado) {
@@ -114,7 +128,7 @@ public class UsuarioController {
         }
         return null;
     }
- 
+
     @GetMapping("/direccion/colonia/{idMunicipio}")
     @ResponseBody
     public List<Colonia> GetColonias(@PathVariable("idMunicipio") int idMunicipio) {
@@ -125,7 +139,7 @@ public class UsuarioController {
                     HttpEntity.EMPTY,
                     new ParameterizedTypeReference<Result<Colonia>>() {
             });
- 
+
             List<Colonia> responseColonias = responseGetColoniaByIdMunicipio.getBody().objects;
             return responseColonias;
         } catch (RestClientException ex) {
@@ -133,8 +147,5 @@ public class UsuarioController {
         }
         return null;
     }
-    
-    
 
-    
 }

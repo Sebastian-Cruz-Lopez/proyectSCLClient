@@ -4,7 +4,7 @@ package com.ejemplo.SCruzProgramacionNCapasMaven.ML;
 public class Roll {
     
     private int idRoll;
-    private String Roll;
+    private String roll;
 
     public int getIdRoll() {
         return idRoll;
@@ -15,12 +15,14 @@ public class Roll {
     }
 
     public String getRoll() {
-        return Roll;
+        return roll;
     }
 
-    public void setRoll(String Roll) {
-        this.Roll = Roll;
+    public void setRoll(String roll) {
+        this.roll = roll;
     }
+
+    
 
 
 
