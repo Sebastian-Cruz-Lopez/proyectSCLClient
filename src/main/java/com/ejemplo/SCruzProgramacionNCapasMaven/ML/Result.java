@@ -11,4 +11,14 @@ public class Result<T> {
     public T object;
     public List<T> objects;
 
+    public List<T> getObjects() {
+        return objects;
+    }
+
+    public void setObjects(List<T> objects) {
+        this.objects = objects;
+    }
+    
+    
+
 }
